@@ -12,7 +12,88 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename = 'icon/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename = 'icon/favicon-16x16.png') }}">
 </head>
-
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-lightpy-3">
+            <div class="container-fluid">
+                <a class="navbar-brand d-flex align-items-center" href="{{ url_for('routes.index') }}">
+                    <img src="{{ url_for('static', filename = 'img/g.square.fill.svg') }}" width="30" height="30"
+                        class="d-inline-block align-top" alt="">
+                </a>
+                <button class="navbar-toggler" data-bs-target="#navcol-1" data-bs-toggle="collapse">
+                    <span class="visually-hidden">Toggle navigation</span>
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <a class="navbar-brand d-flex align-items-center" href="{{ url_for('routes.index') }}">
+                        <span>When2Goat</span>
+                    </a>
+                    <ul class="navbar-nav me-auto">
+                        {% if session.get("authenticated") == True %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('routes.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('template.user_templates')}}">Templates</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <ul class="navbar-nav">
+                        {% if session.get("authenticated") == True %}
+                        <!--todo: fix responsive design of this, it sucks, look into lazy loading-->
+                        <li class="nav-item">
+                            <div class="btn-group me-2">
+                                <a type="button" class="btn btn-primary" href="{{ url_for('routes.create_event') }}">New
+                                    Event</button>
+                                    <a type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                        data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('template.create_template') }}">New
+                                                Template</a></li>
+                                    </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a type="button" class="btn btn-outline-danger" href="{{ url_for('entra.logout') }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z">
+                                    </path>
+                                    <path fill-rule="evenodd"
+                                        d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z">
+                                    </path>
+                                </svg>
+                                Logout
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="btn btn-primary" type="button" href="{{ url_for('entra.sso') }}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid" style="padding-left: 3em; padding-right: 3em;"> <!--styling to pad sides nicely :3-->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                <div> {{ message }} </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <div class="d-flex flex-column flex-lg-equal">
+                {% block content %} {% endblock %}
+            </div>
+        </div>
+    </body>
+    
 <div class="row flex-lg-row align-items-center g-5 py-5">
     <div class="col-lg-8">
         <h1 class="display-5 fw-bold lh-1 mb-3">Go<i><span class="smallHeaderText"
