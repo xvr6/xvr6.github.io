@@ -1,7 +1,3 @@
-# xvr6.dev
-
-- This is my first exploration of the Phoenix Framework for elixir
-- 
 # Xvr6
 
 To start your Phoenix server:
